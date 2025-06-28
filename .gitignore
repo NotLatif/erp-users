@@ -1,0 +1,34 @@
+backend/jboss/server/all/deploy/project.ext
+backend/jboss/server/default/deploy/project.ext
+backend/jboss/server/minimal/deploy/project.ext
+backend/jboss/server/all/log/*.log
+backend/jboss/server/all/tmp/**/*
+backend/jboss/server/all/data/**/*
+backend/jboss/server/all/work/**/*
+backend/jboss/server/default/log/*.log
+backend/jboss/server/default/tmp/**/*
+backend/jboss/server/default/data/**/*
+backend/jboss/server/default/work/**/*
+backend/jboss/server/minimal/log/*.log
+backend/jboss/server/minimal/tmp/**/*
+backend/jboss/server/minimal/data/**/*
+backend/jboss/server/minimal/work/**/*
+
+# deployed package files #
+
+*.DEPLOYED
+
+target/
+
+# IDE files
+backend/.idea/
+backend/*.iml
+backend/.project
+backend/.classpath
+backend/.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+backend/standalone/deployments/
