@@ -2,6 +2,9 @@ package com.example.erp.users;
 
 import java.util.List;
 
+import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
+import org.eclipse.microprofile.openapi.annotations.info.Info;
+
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.PathParam;
@@ -22,6 +25,13 @@ import jakarta.ws.rs.core.UriInfo;
 
 // API STUFF
 
+@OpenAPIDefinition(
+	info = @Info(
+		title = "ERP Users API",
+		version = "1.0",
+		description = "CRUD API for user management"
+	)
+)
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {

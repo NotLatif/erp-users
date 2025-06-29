@@ -32,3 +32,24 @@ backend/.settings/
 Thumbs.db
 
 backend/standalone/deployments/
+
+# FRONTEND 
+node_modules
+
+# Output
+.output
+.vercel
+.netlify
+.wrangler
+.svelte-kit
+frontend/build
+
+# Env
+.env
+.env.*
+!.env.example
+!.env.test
+
+# Vite
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
