@@ -1,19 +1,39 @@
-import { fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ fetch }) => {
-	const response = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/users', {
-		method: 'GET',
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	});
 
-	const users = await response.json();
+    try {
+        const response = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/users', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-	return {
-		users
-	};
+        const users = await response.json();
+    
+        return {
+            users,
+            error: null
+        };
+    } catch (error) {
+        console.error('Failed to load users:', error);
+
+        let errmsg = 'Unable to fetch users.';
+        if (error instanceof TypeError) {
+            if (error.message.includes('fetch failed')) {
+                errmsg = 'Network error: Unable to connect to the server.';
+            } else {
+                errmsg = 'Unexpected error, unable to fetch users.';
+            }
+        }
+
+        return {
+            users: [],
+            error: errmsg
+        }
+    }
 };
 
 export const actions = {

@@ -286,6 +286,9 @@
 							const deletedId = Number(result.data.deletedUserId);
 							const idx = users.findIndex(user => user.id === deletedId);
 							if (idx !== -1) {
+								users.splice(idx, 1);
+							} else {
+								setActionFailure(`User with ID ${deletedId} not found in the list.`);
 							}
 						} else {
 							setActionFailure('Failed to delete user. No data returned.');
@@ -320,6 +323,7 @@
 		</div>
 	</div>
 {/if}
+
 
 <div class="flex min-h-screen flex-col bg-gradient-to-br from-blue-50 to-indigo-100">
 	<header class="flex items-center justify-between bg-white p-6 shadow">
@@ -358,6 +362,23 @@
 							<th class="px-6 py-3"></th>
 						</tr>
 					</thead>
+					{#if data.error}
+						<tbody class="bg-red-100">
+							<tr>
+								<td colspan="5" class="px-6 py-4 text-center text-red-600">
+									{data.error}
+								</td>
+							</tr>
+						</tbody>
+					{:else if users.length === 0}
+						<tbody class="bg-gray-100">
+							<tr>
+								<td colspan="5" class="px-6 py-4 text-center text-gray-500">
+									No users found.
+								</td>
+							</tr>
+						</tbody>
+					{:else}
 					<tbody class="divide-y divide-gray-200 bg-white">
 						{#each users as user (user.id)}
 							<tr transition:fade>
@@ -378,6 +399,7 @@
 							</tr>
 						{/each}
 					</tbody>
+					{/if}
 				</table>
 			</div>
 		</section>
