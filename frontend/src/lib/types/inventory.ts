@@ -2,7 +2,7 @@ export type Product = {
     id: number;
     name: string;
     price: number;
-    sku: number;
+    sku: string;
     description: string;
 };
 
@@ -16,8 +16,8 @@ export type StockEntry = {
     id: number;
     quantity: number;
     updatedAt: string;
-    productId: number;
-    warehouseId: number;
+    product: Product;
+    warehouse: Warehouse;
 };
 
 export type Inventory = {

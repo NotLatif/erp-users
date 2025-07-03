@@ -27,7 +27,7 @@ import jakarta.ws.rs.core.UriInfo;
 		info = @Info(
 			title = "ERP Inventory Product API",
 			version = "1.0",
-			description = "CRUD API for user management"
+			description = "CRUD API for products management"
 		)
 	)
 @Path("/inv/products")
