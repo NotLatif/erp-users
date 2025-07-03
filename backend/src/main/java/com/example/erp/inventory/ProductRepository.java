@@ -35,7 +35,7 @@ public class ProductRepository {
 	}
 	
 	@Transactional
-	public boolean delete(long id) {
+	public boolean delete(Long id) {
 		Product product = em.find(Product.class, id);
 		
 		if (product != null) {

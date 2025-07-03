@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import Footer from '$lib/components/Footer.svelte';
+	import Header from '$lib/components/Header.svelte';
 	import type { Product, StockEntry, Warehouse } from '$lib/types/inventory.js';
 	import { fade } from 'svelte/transition';
 
 
     let { data } = $props();
+
+    console.log("Stock page data:", $state.snapshot(data));
 
 	let stocks : StockEntry[] = $state<StockEntry[]>(data.stockEntries || []);
 
@@ -314,10 +317,7 @@
 {/if}
 
 <div class="container mx-auto px-4 py-8">
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Stock Management</h1>
-        <p class="text-gray-600">Manage inventory across warehouses</p>
-    </div>
+    <Header data={{title: "Stock Management", description: "Manage your stock entries here."}} />
 
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <div class="flex justify-between items-center mb-4">
@@ -342,7 +342,15 @@
                         <th class="px-6 py-3"></th>
                     </tr>
                 </thead>
-                {#if stocks.length === 0}
+                {#if data.error }
+                    <tbody class="bg-red-100">
+                        <tr>
+                            <td colspan="7" class="px-6 py-4 text-center text-red-600">
+                                {data.error}
+                            </td>
+                        </tr>
+                    </tbody>
+                {:else if stocks.length === 0}
                     <tbody class="bg-gray-100">
                         <tr>
                             <td colspan="7" class="px-6 py-4 text-center text-gray-500">No stock entries found.</td>
@@ -361,7 +369,7 @@
                                         {stock.quantity}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">{new Date(stock.updatedAt).toLocaleDateString()}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{stock.uat}</td>
                                 <td class="flex gap-2 px-6 py-4 whitespace-nowrap">
                                     <button class="rounded bg-yellow-400 px-3 py-1 text-white transition hover:bg-yellow-500" onclick={() => editStock(stock.id)}>Edit</button>
                                     <button class="rounded bg-red-500 px-3 py-1 text-white transition hover:bg-red-600" onclick={() => deleteStock(stock.id)}>Delete</button>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import Footer from '$lib/components/Footer.svelte';
+	import Header from '$lib/components/Header.svelte';
 	import type { Warehouse } from '$lib/types/inventory.js';
 	import { fade } from 'svelte/transition';
 
@@ -312,10 +313,7 @@
 {/if}
 
 <div class="container mx-auto px-4 py-8">
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">Warehouse Management</h1>
-        <p class="text-gray-600">Manage your storage facilities</p>
-    </div>
+	<Header data={{ title: "Warehouses", description: "Manage your warehouses here." }} />
 
     <div class="bg-white rounded-lg shadow-md p-6 mb-6">
         <div class="flex justify-between items-center mb-4">
@@ -337,7 +335,15 @@
                         <th class="px-6 py-3"></th>
                     </tr>
                 </thead>
-                {#if warehouses.length === 0}
+                {#if data.error }
+                    <tbody class="bg-red-100">
+                        <tr>
+                            <td colspan="7" class="px-6 py-4 text-center text-red-600">
+                                {data.error}
+                            </td>
+                        </tr>
+                    </tbody>
+                {:else if warehouses.length === 0}
                     <tbody class="bg-gray-100">
                         <tr>
                             <td colspan="4" class="px-6 py-4 text-center text-gray-500">No warehouses found.</td>

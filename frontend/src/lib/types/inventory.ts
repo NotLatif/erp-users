@@ -15,7 +15,7 @@ export type Warehouse = {
 export type StockEntry = {
     id: number;
     quantity: number;
-    updatedAt: string;
+    uat: string;
     product: Product;
     warehouse: Warehouse;
 };
