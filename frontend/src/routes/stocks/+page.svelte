@@ -2,18 +2,19 @@
 	import { enhance } from '$app/forms';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
-	import type { Product, StockEntry, Warehouse } from '$lib/types/inventory.js';
+	import type { Order, ProductDTO, StockEntryDTO, Warehouse } from '$lib/types/inventory.js';
 	import { fade } from 'svelte/transition';
 
 
     let { data } = $props();
 
-    console.log("Stock page data:", $state.snapshot(data));
+	let stocks : StockEntryDTO[] = $state<StockEntryDTO[]>(data.stockEntries || []);
+    let orders : Order[] = $state<Order[]>(data.orders || []);
 
-	let stocks : StockEntry[] = $state<StockEntry[]>(data.stockEntries || []);
+
 
     let warehouses : Warehouse[] = $state<Warehouse[]>(data.warehouses || []);
-    let products : Product[] = $state<Product[]>(data.products || []);
+    let products : ProductDTO[] = $state<ProductDTO[]>(data.products || []);
 
 	let addingStock = $state(false);
 	let newStockEntry = $state({
@@ -22,8 +23,8 @@
 		quantity: 0,
 	});
 
-	let editingStock: StockEntry | null = $state(null);
-	let deletingStock: StockEntry | null = $state(null);
+	let editingStock: StockEntryDTO | null = $state(null);
+	let deletingStock: StockEntryDTO | null = $state(null);
 
 
 	let actionSuccess = $state("");
@@ -92,7 +93,20 @@
 
 						if (result.data) {
 							setActionSuccess('Stock added successfully!');
-							// Additional logic when there's data
+
+                            const stockData = result.data as { newStockEntry: StockEntryDTO };
+
+							console.log('New stock data:', stockData);
+
+							stocks.push({
+                                id: stockData.newStockEntry.id,
+                                product: stockData.newStockEntry.product,
+                                warehouse: stockData.newStockEntry.warehouse,
+                                quantity: stockData.newStockEntry.quantity,
+                                uat: stockData.newStockEntry.uat,
+							});
+
+
 						} else {
 							setActionFailure('Failed to add stock. No data returned.');
 						}
@@ -381,6 +395,69 @@
             </table>
         </div>
     </div>
+
+    <!-- Orders -->
+    <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold text-gray-700">Orders Viewer</h2>
+            <!-- <button 
+                class="rounded bg-blue-600 px-4 py-2 text-white shadow transition hover:bg-blue-700" 
+                onclick={() => addOrder()}>
+                + Add Order
+            </button> -->
+        </div>
+        
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">#</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Customer</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Total</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Updated At</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-500 uppercase">Cart Items</th>
+                        <th class="px-6 py-3"></th>
+                    </tr>
+                </thead>
+                {#if data.error }
+                    <tbody class="bg-red-100">
+                        <tr>
+                            <td colspan="7" class="px-6 py-4 text-center text-red-600">
+                                {data.error}
+                            </td>
+                        </tr>
+                    </tbody>
+                {:else if stocks.length === 0}
+                    <tbody class="bg-gray-100">
+                        <tr>
+                            <td colspan="7" class="px-6 py-4 text-center text-gray-500">No orders entries found.</td>
+                        </tr>
+                    </tbody>
+                {:else}
+                    <tbody class="divide-y divide-gray-200 bg-white">
+                        {#each orders as order (order.id)}
+                            <tr>
+                                <td class="px-6 py-4 whitespace-nowrap">{order.id}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{order.orderNo}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{order.customer}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{order.status}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{order.totalAmount}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{order.updatedAt}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">{order.cart.length}</td>
+                    
+                                <td class="flex gap-2 px-6 py-4 whitespace-nowrap">
+                                    <!-- <button class="rounded bg-yellow-400 px-3 py-1 text-white transition hover:bg-yellow-500" onclick={() => editStock(order.id)}>Edit</button>
+                                    <button class="rounded bg-red-500 px-3 py-1 text-white transition hover:bg-red-600" onclick={() => deleteStock(order.id)}>Delete</button> -->
+                                </td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                {/if}
+            </table>
+        </div>
+    </div>  
 </div>
 
 <Footer />

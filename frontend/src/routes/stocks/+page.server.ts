@@ -4,34 +4,30 @@ import type { PageServerLoad } from "./$types";
 export const load: PageServerLoad = async ({ fetch }) => {
 
     try {
-        const response = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/stocks', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const stockEntries = await response.json();
-    
-        const warehousesResponse = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/warehouses', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const warehouses = await warehousesResponse.json();
+        const headers = {
+            'Content-Type': 'application/json'
+        };
 
-        const productsResponse = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/products', {
+        const init : RequestInit = {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             }
-        });
-        const products = await productsResponse.json();
+        };
+
+        const [stockEntries, warehouses, products, orders] = await Promise.all([
+            fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/stocks', init)      .then(res => res.json()),
+            fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/warehouses', init)  .then(res => res.json()),            
+            fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/products?limit=-1', init)    .then(res => res.json()),
+            fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/orders', init)          .then(res => res.json())
+        ]);
+
 
         return {
             stockEntries,
             warehouses,
             products,
+            orders,
             error: null
         };
     } catch (error) {

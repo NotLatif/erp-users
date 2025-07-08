@@ -2,13 +2,13 @@
 	import { enhance } from '$app/forms';
 	import Footer from '$lib/components/Footer.svelte';
 	import Header from '$lib/components/Header.svelte';
-	import type { Product } from '$lib/types/inventory.js';
+	import type { ProductDTO } from '$lib/types/inventory.js';
 	import { fade } from 'svelte/transition';
 
 
     let { data } = $props();
 
-    let products : Product[] = $state<Product[]>(data.products || []);
+    let products : ProductDTO[] = $state<ProductDTO[]>(data.products || []);
 
 	let addingProduct = $state(false);
 	let newProduct = $state({
@@ -19,8 +19,8 @@
 		description: '',
 	});
 
-	let editingProduct: Product | null = $state(null);
-	let deletingProduct: Product | null = $state(null);
+	let editingProduct: ProductDTO | null = $state(null);
+	let deletingProduct: ProductDTO | null = $state(null);
 
 
 	let actionSuccess = $state("");
@@ -94,7 +94,7 @@
 						if (result.data) {
 							setActionSuccess('Product added successfully!');
 
-							const productData = result.data as { newProduct: Product };
+							const productData = result.data as { newProduct: ProductDTO };
 
 							console.log('New product data:', productData);
 
@@ -212,7 +212,7 @@
 						if (result.data) {
 							setActionSuccess('Product edited successfully!');
 
-							const productData = result.data as { updatedProduct: Product };
+							const productData = result.data as { updatedProduct: ProductDTO };
 
                             const idx = products.findIndex(p => p.id === productData.updatedProduct.id);
                             if (idx !== -1) {

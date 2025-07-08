@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { Product, Warehouse, StockEntry } from '$lib/types/inventory';
+    import type { ProductDTO, Warehouse, StockEntryDTO } from '$lib/types/inventory';
 
     // Mock data for the dashboard
-    const mockProducts: Product[] = [
+    const mockProducts: ProductDTO[] = [
         { id: 1, name: 'Laptop XPS 13', price: 1299.99, sku: 'LT-XPS13', description: 'Dell XPS 13 Laptop' },
         { id: 2, name: 'Monitor 27"', price: 349.99, sku: 'MN-27UL', description: 'Ultra-wide 27" monitor' },
         { id: 3, name: 'Keyboard', price: 89.99, sku: 'KB-MX', description: 'Mechanical keyboard' },
@@ -20,7 +20,7 @@
         { id: 4, name: 'East Warehouse', location: 'Boston' }
     ];
 
-    const mockStockEntries: StockEntry[] = [
+    const mockStockEntries: StockEntryDTO[] = [
         { id: 1, quantity: 25, uat: '2025-06-28T08:30:00', product: mockProducts[0], warehouse: mockWarehouses[0] },
         { id: 2, quantity: 5, uat: '2025-06-29T14:15:00', product: mockProducts[1], warehouse: mockWarehouses[0] },
         { id: 3, quantity: 3, uat: '2025-06-30T11:45:00', product: mockProducts[2], warehouse: mockWarehouses[1] },
