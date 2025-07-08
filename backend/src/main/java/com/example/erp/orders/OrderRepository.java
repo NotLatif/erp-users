@@ -23,14 +23,19 @@ public class OrderRepository {
 	}
 	
 	public List<Order> findAll(int offset, int limit) {
-		return em.createQuery("SELECT o FROM Order o", Order.class)
-				.setFirstResult(offset)
-				.setMaxResults(limit)
-				.getResultList();
+	    return em.createQuery(
+	        "SELECT DISTINCT o FROM Order o LEFT JOIN FETCH o.cart LEFT JOIN FETCH o.cart.product", Order.class)
+	        .setFirstResult(offset)
+	        .setMaxResults(limit)
+	        .getResultList();
 	}
 	
 	public Order findById(Long id) {
-		return em.find(Order.class, id);
+	    List<Order> results = em.createQuery(
+	        "SELECT DISTINCT o FROM Order o LEFT JOIN FETCH o.cart LEFT JOIN FETCH o.cart.product WHERE o.id = :id", Order.class)
+	        .setParameter("id", id)
+	        .getResultList();
+	    return results.isEmpty() ? null : results.get(0);
 	}
 	
 	@Transactional

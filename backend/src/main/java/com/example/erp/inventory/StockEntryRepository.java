@@ -23,10 +23,16 @@ public class StockEntryRepository {
 	}
 	
 	public List<StockEntry> findAll(int offset, int limit) {
+		if (limit == -1) {
+			return em.createQuery("SELECT s FROM StockEntry s", StockEntry.class)
+					.setFirstResult(offset)
+					.getResultList();
+		}
 		return em.createQuery("SELECT s FROM StockEntry s", StockEntry.class)
 				.setFirstResult(offset)
 				.setMaxResults(limit)
 				.getResultList();
+		
 	}
 	
 	public StockEntry findById(Long id) {

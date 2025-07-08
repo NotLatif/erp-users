@@ -25,7 +25,7 @@ import jakarta.validation.constraints.Size;
 public class Order {
 
     public enum Status {
-        PROCESSING, SHIPPING, SHIPPED
+        PROCESSING, SHIPPING, DELIVERED, CANCELED
     }
 
     @Id

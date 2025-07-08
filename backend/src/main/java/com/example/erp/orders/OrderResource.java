@@ -3,17 +3,20 @@ package com.example.erp.orders;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
 
 import com.example.erp.inventory.Product;
 import com.example.erp.inventory.ProductRepository;
+import com.example.erp.orders.dto.OrderMapper;
 import com.example.erp.orders.dto.OrderRequest;
+import com.example.erp.orders.dto.OrderResponse;
 
 import jakarta.inject.Inject;
 import jakarta.validation.Valid;
-import jakarta.websocket.server.PathParam;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.DefaultValue;
@@ -74,7 +77,7 @@ public class OrderResource {
         repo.save(order);
 
         UriBuilder builder = uriInfo.getAbsolutePathBuilder().path(order.getId().toString());
-        return Response.created(builder.build()).entity(order).build();
+        return Response.created(builder.build()).entity(OrderMapper.toDto(order)).build();
     }
 	
 	@GET
@@ -84,13 +87,14 @@ public class OrderResource {
         if (order == null) {
             throw new NotFoundException("Order not found with id: " + id);
         }
-        return Response.ok(order).build();
+        return Response.ok(OrderMapper.toDto(order)).build();
     }
 
-    @GET
-    public List<Order> getOrders(@QueryParam("offset") @DefaultValue("0") int offset,
-                              @QueryParam("limit") @DefaultValue("20") int limit) {
-        return repo.findAll(offset, limit);
+	@GET
+    public List<OrderResponse> getOrders(@QueryParam("offset") @DefaultValue("0") int offset,
+                                         @QueryParam("limit") @DefaultValue("20") int limit) {
+        List<Order> orders = repo.findAll(offset, limit);
+        return orders.stream().map(OrderMapper::toDto).collect(Collectors.toList());
     }
     
     @PUT
@@ -128,7 +132,7 @@ public class OrderResource {
 
         repo.save(existing);
 
-        return Response.ok(existing).build();
+        return Response.ok(OrderMapper.toDto(existing)).build();
     }
     
     

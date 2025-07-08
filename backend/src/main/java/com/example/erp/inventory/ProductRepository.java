@@ -24,10 +24,17 @@ public class ProductRepository {
 	}
 	
 	public List<Product> findAll(int offset, int limit) {
+		
+		if (limit == -1) {
+			return em.createQuery("SELECT p FROM Product p", Product.class)
+					.setFirstResult(offset)
+					.getResultList();
+		} 
 		return em.createQuery("SELECT p FROM Product p", Product.class)
 				.setFirstResult(offset)
 				.setMaxResults(limit)
 				.getResultList();
+		
 	}
 	
 	public Product findById(Long id) {

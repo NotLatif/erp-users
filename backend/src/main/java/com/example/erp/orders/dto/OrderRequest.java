@@ -25,7 +25,7 @@ public class OrderRequest {
     public List<CartItem> cart;
 
     @NotBlank
-    @Pattern(regexp = "PROCESSING|SHIPPING|SHIPPED")
+    @Pattern(regexp = "PROCESSING|SHIPPING|DELIVERED|CANCELED")
     public String status;
 
     public static class CartItem {
