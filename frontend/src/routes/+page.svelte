@@ -2,10 +2,9 @@
 	import type { ProductDTO, StockEntryDTO } from '$lib/types/inventory';
 	import Footer from '$lib/components/Footer.svelte';
 	import { enhance } from '$app/forms';
+	import { fade } from 'svelte/transition';
 
 	let { data } = $props();
-
-	console.log($state.snapshot(data))
 
 	// Mock data for available products
 	// We get stocks as they contain product information as well as quantity and other details
@@ -76,8 +75,33 @@
 
 	
 
+	let actionSuccess = $state("");
+	let actionFailure = $state("");
+
+	function setActionSuccess(message: string) {
+		actionSuccess = message;
+		setTimeout(() => actionSuccess = "", 2000);
+	}
+	function setActionFailure(message: string) {
+		actionFailure = message;
+		setTimeout(() => actionFailure = "", 2000);
+	}
 
 </script>
+
+{#if actionSuccess}
+	<div transition:fade class="fixed bottom-4 right-4 z-50 bg-green-500 text-white px-4 py-2 rounded-lg shadow-md">
+		{actionSuccess}
+	</div>
+{/if}
+{#if actionFailure}
+	<div transition:fade class="fixed bottom-4 right-4 z-50 bg-red-500 text-white px-4 py-2 rounded-lg shadow-md">
+		{actionFailure}
+	</div>
+{/if}
+
+
+
 
 <div class="bg-gradient-to-r from-blue-500 to-indigo-600 py-16 px-4">
 	<div class="container mx-auto text-center">
@@ -183,12 +207,19 @@
 								return async ({ result, update }) => {
 									if (result.type === 'failure') {
 										console.log("failure", result);
+										setActionFailure("Checkout failed. Please try again.");
 									} else if (result.type === 'error') {
 										console.log("error", result);
+										setActionFailure("Checkout failed. Please try again.");
 									} else if (result.type === 'success') {
 										console.log("success", result);
+										cart = []; // Clear cart after successful checkout
+										showCart = false; // Close cart panel
+										setActionSuccess("Checkout successful! Thank you for your purchase.");
+
 									} else {
 										console.log("Unexpected error", result);
+										setActionFailure("An unexpected error occurred. Please try again.");
 									}
 
 

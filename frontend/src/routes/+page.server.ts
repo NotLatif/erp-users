@@ -40,18 +40,40 @@ export const load : PageServerLoad = async ({ fetch }) => {
 export const actions = {
     checkout: async ({ request }) => {
         const formData = await request.formData();
-        const cart = JSON.parse(formData.get('cart') as string);
+        const cart : { productId: number; quantity: number; }[] = JSON.parse(formData.get('cart') as string);
 
-        return { success: true, cart };
+        console.log('Checkout cart:', cart);
+
+        type RequestBody = {
+            orderNo: string;
+            customer: string;
+            cart: {
+                productId: number;
+                quantity: number;
+            }[],
+            status: 'PROCESSING' | 'SHIPPING' | 'DELIVERED' | 'CANCELED';
+        }
+
+        const body: RequestBody = {
+            orderNo: 'ORD-' + Date.now(),
+            customer: 'John Doe',
+            cart: cart.map(item => ({
+                productId: item.productId,
+                quantity: item.quantity
+            })),
+            status: 'PROCESSING'
+        }
+
+        console.log('Checkout body:', body);
 
         // Process the checkout (e.g., call an API to create an order)
         try {
-            const response = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/checkout', {
+            const response = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ cart })
+                body: JSON.stringify(body)
             });
 
             const result = await response.json();
