@@ -1,6 +1,6 @@
 # BE Routes
 
-baseUrl = "http://localhost:8080/erp-users-1.0-SNAPSHOT/api/"
+baseUrl = "http://192.168.1.31:8080/erp-users/api/"
 
 ## User Routes
 

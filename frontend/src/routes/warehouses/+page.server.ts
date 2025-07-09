@@ -1,10 +1,12 @@
 import { fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
+import { env } from "$env/dynamic/private";
 
 export const load: PageServerLoad = async ({ fetch }) => {
 
+    console.log(env.BACKEND_URL)
     try {
-        const response = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/warehouses', {
+        const response = await fetch(`${env.BACKEND_URL}/api/inv/warehouses`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -55,7 +57,7 @@ export const actions = {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/warehouses', {
+            const response = await fetch(`${env.BACKEND_URL}/api/inv/warehouses`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -95,7 +97,7 @@ export const actions = {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/warehouses/${id}`, {
+            const response = await fetch(`${env.BACKEND_URL}/api/inv/warehouses/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -127,7 +129,7 @@ export const actions = {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/warehouses/${id}`, {
+            const response = await fetch(`${env.BACKEND_URL}/api/inv/warehouses/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'

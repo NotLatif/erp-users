@@ -1,5 +1,6 @@
 import { fail } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
+import { env } from "$env/dynamic/private";
 
 export const load: PageServerLoad = async ({ fetch }) => {
 
@@ -16,10 +17,10 @@ export const load: PageServerLoad = async ({ fetch }) => {
         };
 
         const [stockEntries, warehouses, products, orders] = await Promise.all([
-            fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/stocks', init)      .then(res => res.json()),
-            fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/warehouses', init)  .then(res => res.json()),            
-            fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/products?limit=-1', init)    .then(res => res.json()),
-            fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/orders', init)          .then(res => res.json())
+            fetch(`${env.BACKEND_URL}/api/inv/stocks`, init).then(res => res.json()),
+            fetch(`${env.BACKEND_URL}/api/inv/warehouses`, init).then(res => res.json()),
+            fetch(`${env.BACKEND_URL}/api/inv/products?limit=-1`, init).then(res => res.json()),
+            fetch(`${env.BACKEND_URL}/api/orders`, init).then(res => res.json())
         ]);
 
 
@@ -81,7 +82,7 @@ export const actions = {
         }
 
         try {
-            const response = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/stocks', {
+            const response = await fetch(`${env.BACKEND_URL}/api/inv/stocks`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -131,7 +132,7 @@ export const actions = {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/stocks/${id}`, {
+            const response = await fetch(`${env.BACKEND_URL}/api/inv/stocks/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -163,7 +164,7 @@ export const actions = {
         }
 
         try {
-            const response = await fetch(`http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/stocks/${id}`, {
+            const response = await fetch(`${env.BACKEND_URL}/api/inv/stocks/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'

@@ -1,10 +1,10 @@
-import type { ProductDTO } from "$lib/types/inventory";
+import { env } from "$env/dynamic/private";
 import type { PageServerLoad } from "./$types";
 
 export const load : PageServerLoad = async ({ fetch }) => {
 
     try {
-         const response = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/inv/stocks?limit=-1', {
+         const response = await fetch(`${env.BACKEND_URL}/api/inv/stocks?limit=-1`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -68,7 +68,7 @@ export const actions = {
 
         // Process the checkout (e.g., call an API to create an order)
         try {
-            const response = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/orders', {
+            const response = await fetch(`${env.BACKEND_URL}/api/orders`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

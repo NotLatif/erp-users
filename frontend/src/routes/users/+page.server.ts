@@ -1,10 +1,11 @@
 import { fail } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
+import { env } from '$env/dynamic/private';
 
 export const load: PageServerLoad = async ({ fetch }) => {
 
     try {
-        const response = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/users', {
+        const response = await fetch(`${env.BACKEND_URL}/api/users`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -46,7 +47,7 @@ export const actions = {
         
         console.log('Creating user:', { username, email, role });
 
-        const response = await fetch('http://localhost:8080/erp-users-1.0-SNAPSHOT/api/users', {
+        const response = await fetch(`${env.BACKEND_URL}/api/users`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -71,7 +72,7 @@ export const actions = {
         
         console.log('Updating user:', { id, username, email });
 
-        const response = await fetch(`http://localhost:8080/erp-users-1.0-SNAPSHOT/api/users/${id}`, {
+        const response = await fetch(`${env.BACKEND_URL}/api/users/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -92,7 +93,7 @@ export const actions = {
         const id = formData.get('id') as string;
 
         console.log('Deleting user with ID:', id);
-        const response = await fetch(`http://localhost:8080/erp-users-1.0-SNAPSHOT/api/users/${id}`, {
+        const response = await fetch(`${env.BACKEND_URL}/api/users/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json'
