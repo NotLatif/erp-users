@@ -11,11 +11,12 @@
 			<a href="/" class="text-white text-lg font-semibold">ERP</a>
 			<div class="flex space-x-4">
 				<a href="/" class="text-gray-300 hover:text-white">Shop</a>
-				<a href="/dashboard" class="text-gray-300 hover:text-white">Dashboard</a>
+				<!-- <a href="/dashboard" class="text-gray-300 hover:text-white">Dashboard</a> -->
 				<a href="/warehouses" class="text-gray-300 hover:text-white">Warehouses</a>
 				<a href="/products" class="text-gray-300 hover:text-white">Products</a>
 				<a href="/stocks" class="text-gray-300 hover:text-white">Stocks</a>
 				<a href="/users" class="text-gray-300 hover:text-white">Users</a>
+				<a href="/logout" class="text-gray-300 hover:text-white">Logout</a>
 			</div>
 		</div>
 	</nav>
